@@ -8,15 +8,6 @@ from kuhl_haus.canary.env import (
     DEFAULT_CANARY_INVOCATION_INTERVAL,
     DEFAULT_CANARY_INVOCATION_COUNT,
 )
-from kuhl_haus.metrics.env import (
-    CARBON_CONFIG,
-    LOG_LEVEL,
-    METRIC_NAMESPACE,
-    NAMESPACE_ROOT,
-    THREAD_POOL_SIZE,
-    POD_NAME,
-)
-from kuhl_haus.metrics.recorders.graphite_logger import GraphiteLogger, GraphiteLoggerOptions
 
 __author__ = "Tom Pounders"
 __copyright__ = "Tom Pounders"
@@ -50,6 +41,15 @@ def parse_args(args):
 
 def main(args):
     parsed_args = parse_args(args)
+    from kuhl_haus.metrics.recorders.graphite_logger import GraphiteLogger, GraphiteLoggerOptions
+    from kuhl_haus.metrics.env import (
+        CARBON_CONFIG,
+        LOG_LEVEL,
+        METRIC_NAMESPACE,
+        NAMESPACE_ROOT,
+        THREAD_POOL_SIZE,
+        POD_NAME,
+    )
     graphite_logger = GraphiteLogger(GraphiteLoggerOptions(
         application_name='canary',
         log_level=LOG_LEVEL,
@@ -61,7 +61,7 @@ def main(args):
     ))
 
     try:
-        from bedrock_canary.handlers import script_handler
+        from kuhl_haus.canary.handlers import script_handler
         script_handler(parsed_args.script)(
             recorder=graphite_logger,
             delay=parsed_args.delay,
@@ -93,6 +93,6 @@ if __name__ == "__main__":
     # After installing your project with pip, users can also run your Python
     # modules as scripts via the ``-m`` flag, as defined in PEP 338::
     #
-    #     python -m bedrock_canary.app 42
+    #     python -m kuhl_haus.canary.app 42
     #
     run()
