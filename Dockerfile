@@ -1,13 +1,8 @@
-FROM public.ecr.aws/docker/library/python:3.12-slim
-
-WORKDIR /libs/metrics
-COPY ./kuhl-haus-metrics /libs/metrics/
-RUN pip install --no-cache-dir --upgrade -r /libs/metrics/requirements.txt
-RUN pip install --no-cache-dir .
-RUN pytest /libs/metrics/tests -v
+ARG BASE_IMAGE=ghcr.io/kuhl-haus/kuhl-haus-metrics:latest
+FROM ${BASE_IMAGE}
 
 WORKDIR /app
-COPY ./kuhl-haus-canary /app/
+COPY . /app/
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 RUN pip install --no-cache-dir .
 RUN pytest /app/tests -v
