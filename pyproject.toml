@@ -11,42 +11,31 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.12"
-license = {text = "MIT"}
+license = {file = "LICENSE.txt"}
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python"
 ]
 dependencies = [
     "kuhl-haus-metrics @ git+https://github.com/kuhl-haus/kuhl-haus-metrics.git@v0.2.0",
-    "uvicorn~=0.34.0",
-    "fastapi~=0.115.11",
-    "boto3~=1.37.5",
-    "numpy~=2.2.3",
     "requests~=2.32.3",
-    "tiktoken~=0.9.0",
-    "botocore~=1.37.5",
-    "pydantic~=2.10.6",
-    "importlib_metadata~=8.6.1",
-    "dataclasses~=0.6",
     "dataclasses-json~=0.6.7",
     "dnspython~=2.7.0",
     "pyOpenSSL~=25.0.0",
     "importlib-metadata~=8.6.1",
-    "setuptools~=75.8.2",
-    "pytest~=8.3.5",
-    "pytest-cov~=6.0.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/kuhl-haus/kuhl-haus-canary"
 Documentation = "https://github.com/kuhl-haus/kuhl-haus-canary/wiki"
-Source = "https://github.com/kuhl-haus/kuhl-haus-canary"
+Source = "https://github.com/kuhl-haus/kuhl-haus-canary.git"
 Changelog = "https://github.com/kuhl-haus/kuhl-haus-canary/commits"
 Tracker = "https://github.com/kuhl-haus/kuhl-haus-canary/issues"
 
 [project.optional-dependencies]
 testing = [
     "setuptools~=76.1.0",
+    "pdm-backend",
     "pytest~=8.3.5",
     "pytest-cov~=6.0.0",
 ]
