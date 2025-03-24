@@ -11,7 +11,7 @@ WORKDIR /build
 COPY . /build/
 
 # Install dependencies and build/install package
-RUN pdm install
+RUN pdm install -G testing
 
 # Run tests
 RUN pdm run pytest tests -v
