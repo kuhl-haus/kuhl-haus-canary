@@ -4,7 +4,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "kuhl-haus-canary"
-version = "0.2.0"
+version = "0.2.1"
 description = "Simple canary and site monitoring service"
 authors = [
     { name = "Tom Pounders", email = "git@oldschool.engineer" },
@@ -17,7 +17,7 @@ classifiers = [
     "Programming Language :: Python"
 ]
 dependencies = [
-    "kuhl-haus-metrics @ git+https://github.com/kuhl-haus/kuhl-haus-metrics.git@v0.2.0",
+    "kuhl-haus-metrics @ git+https://github.com/kuhl-haus/kuhl-haus-metrics.git@v0.2.1",
     "requests~=2.32.3",
     "dataclasses-json~=0.6.7",
     "dnspython~=2.7.0",
