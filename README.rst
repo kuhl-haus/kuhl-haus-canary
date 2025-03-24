@@ -34,10 +34,9 @@ bedrock_canary
 ==============
 
 
-    Add a short description here!
+Simple canary and site monitoring service
 
-
-A longer description of your project goes here...
+... more to come!
 
 
 .. _pyscaffold-notes:
