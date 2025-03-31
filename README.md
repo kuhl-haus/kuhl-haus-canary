@@ -6,8 +6,14 @@
 [![Monthly Downloads](https://pepy.tech/badge/kuhl-haus-canary/month)](https://pepy.tech/project/kuhl-haus-canary)
 -->
 
-[![PyPI-Server](https://img.shields.io/pypi/v/kuhl-haus-canary.svg)](https://pypi.org/project/kuhl-haus-canary/)
-[![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
+
+[![License](https://img.shields.io/github/license/kuhl-haus/kuhl-haus-canary)](https://github.com/kuhl-haus/kuhl-haus-canary/blob/mainline/LICENSE.txt)
+[![PyPI](https://img.shields.io/pypi/v/kuhl-haus-canary.svg)](https://pypi.org/project/kuhl-haus-canary/)
+[![Build Status](https://github.com/kuhl-haus/kuhl-haus-canary/actions/workflows/publish-to-pypi.yml/badge.svg)](https://github.com/kuhl-haus/kuhl-haus-canary/actions/workflows/publish-to-pypi.yml)
+[![CodeQL](https://github.com/kuhl-haus/kuhl-haus-canary/workflows/CodeQL/badge.svg)](https://github.com/kuhl-haus/kuhl-haus-canary/workflows/CodeQL/)
+[![codecov](https://codecov.io/gh/kuhl-haus/kuhl-haus-canary/branch/mainline/graph/badge.svg)](https://codecov.io/gh/kuhl-haus/kuhl-haus-canary)
+[![GitHub issues](https://img.shields.io/github/issues/kuhl-haus/kuhl-haus-canary)](https://github.com/kuhl-haus/kuhl-haus-canary/issues)
+[![Downloads](https://static.pepy.tech/badge/kuhl-haus-canary/month)](https://pepy.tech/project/kuhl-haus-canary)
 
 # kuhl-haus-canary
 
