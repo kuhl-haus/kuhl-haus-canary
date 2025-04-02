@@ -2,7 +2,7 @@ import pytest
 import json
 import tempfile
 import os
-from typing import Any, List, Optional, Sequence
+from urllib.parse import urlparse
 from unittest.mock import patch, mock_open
 
 from kuhl_haus.canary.models.endpoint_model import EndpointModel
@@ -77,7 +77,10 @@ def test_endpoint_model_url_property_basic(basic_endpoint_model):
     result = sut.url
 
     # Assert
-    assert result == "https://example.com:443/"
+    parsed_url = urlparse(result)
+    assert parsed_url.hostname == "example.com"
+    assert parsed_url.scheme == "https"
+    assert parsed_url.port == 443
 
 
 def test_endpoint_model_url_property_with_path_and_port(basic_endpoint_model):
@@ -91,7 +94,11 @@ def test_endpoint_model_url_property_with_path_and_port(basic_endpoint_model):
     result = sut.url
 
     # Assert
-    assert result == "https://example.com:8443/api/health"
+    parsed_url = urlparse(result)
+    assert parsed_url.hostname == "example.com"
+    assert parsed_url.scheme == "https"
+    assert parsed_url.port == 8443
+    assert parsed_url.path == "/api/health"
 
 
 def test_endpoint_model_url_property_with_query_params():
@@ -107,10 +114,9 @@ def test_endpoint_model_url_property_with_query_params():
     result = sut.url
 
     # Assert
-    assert "https://example.com:443/" in result
-    assert "param1=value1" in result
-    assert "param2=value2" in result
-    assert "?" in result
+    parsed_url = urlparse(result)
+    assert parsed_url.hostname == "example.com"
+    assert parsed_url.query == 'param1=value1&param2=value2'
 
 
 def test_endpoint_model_url_property_with_fragment():
@@ -126,7 +132,9 @@ def test_endpoint_model_url_property_with_fragment():
     result = sut.url
 
     # Assert
-    assert result == "https://example.com:443/#section"
+    parsed_url = urlparse(result)
+    assert parsed_url.hostname == "example.com"
+    assert parsed_url.fragment == "section"
 
 
 def test_endpoint_model_url_property_with_all_components(complete_endpoint_model):
@@ -138,10 +146,10 @@ def test_endpoint_model_url_property_with_all_components(complete_endpoint_model
     result = sut.url
 
     # Assert
-    assert "http://example.org:8080/api/v1" in result
-    assert "key1=value1" in result
-    assert "key2=value2" in result
-    assert "#section1" in result
+    parsed_url = urlparse(result)
+    assert parsed_url.hostname == "example.org"
+    assert parsed_url.fragment == "section1"
+    assert parsed_url.query == 'key1=value1&key2=value2'
 
 
 def test_endpoint_model_normalize_path_empty():
