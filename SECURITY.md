@@ -53,7 +53,7 @@ We follow a **coordinated disclosure** process:
 
 ## Security Best Practices Used in This Project
 
-- **Automated Security Testing**: All commits to the mainline branch undergo automated CodeQL scanning.
+- **Automated Security Testing**: All commits to the mainline branch undergo [automated CodeQL scanning](https://github.com/kuhl-haus/kuhl-haus-canary/actions/workflows/github-code-scanning/codeql).
 - **Regular Dependency Updates**: We use Dependabot automation to keep dependencies updated.
 - **Supply Chain Security**: We sign releases, use artifact verification, and publish to PyPI with a [Trusted Publisher](https://docs.pypi.org/trusted-publishers/).
 
@@ -61,7 +61,8 @@ We follow a **coordinated disclosure** process:
 
 For encrypted communication, please use our PGP key.
 
-Fingerprint: `74d6f5d19c1747729c4c4d8403262a29b12a7124`
+Security Contact:  ```security@kuhl-haus```  
+Fingerprint: `74d6f5d19c1747729c4c4d8403262a29b12a7124`  
 Key type: ECC (Curve25519)
 
 ```
