@@ -5,7 +5,7 @@ import os
 from typing import Any, List, Optional, Sequence
 from unittest.mock import patch, mock_open
 
-from endpoint_model import EndpointModel
+from kuhl_haus.canary.models.endpoint_model import EndpointModel
 
 
 @pytest.fixture
