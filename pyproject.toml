@@ -17,12 +17,12 @@ classifiers = [
     "Programming Language :: Python"
 ]
 dependencies = [
-    "kuhl-haus-metrics==0.2.6",
-    "requests~=2.32.3",
-    "dataclasses-json~=0.6.7",
-    "dnspython~=2.7.0",
-    "pyOpenSSL~=25.0.0",
-    "importlib-metadata~=8.6.1",
+    "kuhl-haus-metrics",
+    "requests",
+    "dataclasses-json",
+    "dnspython",
+    "pyOpenSSL",
+    "importlib-metadata",
 ]
 
 [project.urls]
@@ -34,10 +34,10 @@ Tracker = "https://github.com/kuhl-haus/kuhl-haus-canary/issues"
 
 [project.optional-dependencies]
 testing = [
-    "setuptools~=78.1.0",
+    "setuptools",
     "pdm-backend",
-    "pytest~=8.3.5",
-    "pytest-cov~=6.1.0",
+    "pytest",
+    "pytest-cov",
 ]
 
 # [project.scripts]
