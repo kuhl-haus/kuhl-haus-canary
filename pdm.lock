@@ -342,7 +342,7 @@ files = [
 
 [[package]]
 name = "kuhl-haus-metrics"
-version = "0.2.8"
+version = "0.2.9"
 requires_python = ">=3.12"
 summary = "Application logging and instrumentation"
 groups = ["default"]
@@ -353,8 +353,8 @@ dependencies = [
     "importlib-metadata",
 ]
 files = [
-    {file = "kuhl_haus_metrics-0.2.8-py3-none-any.whl", hash = "sha256:1d74bde878447fb52a8a606278cd8bb4a3beb02af26ce4938a69325f38e2c7fb"},
-    {file = "kuhl_haus_metrics-0.2.8.tar.gz", hash = "sha256:06edbb2571b0625db2f974f87335e57b7a890d778b1d52b7cbbf3adf32b8736e"},
+    {file = "kuhl_haus_metrics-0.2.9-py3-none-any.whl", hash = "sha256:96fb2d36d5efedc31bf7f55526e1588d033e87165d84b127f88c82c21138a974"},
+    {file = "kuhl_haus_metrics-0.2.9.tar.gz", hash = "sha256:073b5f99fc593f38dc5a31dd9d42567becfe04916a1603f46b818447676b2164"},
 ]
 
 [[package]]
@@ -432,7 +432,7 @@ files = [
 
 [[package]]
 name = "pydantic"
-version = "2.11.2"
+version = "2.11.3"
 requires_python = ">=3.9"
 summary = "Data validation using Python type hints"
 groups = ["default"]
@@ -443,8 +443,8 @@ dependencies = [
     "typing-inspection>=0.4.0",
 ]
 files = [
-    {file = "pydantic-2.11.2-py3-none-any.whl", hash = "sha256:7f17d25846bcdf89b670a86cdfe7b29a9f1c9ca23dee154221c9aa81845cfca7"},
-    {file = "pydantic-2.11.2.tar.gz", hash = "sha256:2138628e050bd7a1e70b91d4bf4a91167f4ad76fdb83209b107c8d84b854917e"},
+    {file = "pydantic-2.11.3-py3-none-any.whl", hash = "sha256:a082753436a07f9ba1289c6ffa01cd93db3548776088aa917cc43b63f68fa60f"},
+    {file = "pydantic-2.11.3.tar.gz", hash = "sha256:7471657138c16adad9322fe3070c0116dd6c3ad8d649300e3cbdfe91f4db4ec3"},
 ]
 
 [[package]]
