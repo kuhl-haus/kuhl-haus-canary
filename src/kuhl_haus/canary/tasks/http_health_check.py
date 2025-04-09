@@ -11,6 +11,7 @@ from kuhl_haus.metrics.data.metrics import Metrics
 
 def invoke_health_check(ep: EndpointModel, metrics: Metrics, logger: Logger):
     try:
+        metrics.set_counter('requests', 1)
         start_time = time.perf_counter_ns()
         response = get(url=ep.url, timeout=(ep.connect_timeout, ep.read_timeout))
         response_time = time.perf_counter_ns() - start_time
