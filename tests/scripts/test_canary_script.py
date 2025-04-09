@@ -1,9 +1,8 @@
 import pytest
-from unittest.mock import Mock, patch, call, MagicMock, create_autospec
-import traceback
+from unittest.mock import Mock, patch, create_autospec
 from logging import Logger
 
-from kuhl_haus.canary.scripts.canary_script import CanaryScript
+from kuhl_haus.canary.models.canary_script import CanaryScript
 
 
 class ConcreteCanaryScript(CanaryScript):
@@ -25,7 +24,7 @@ def test_canary_script_constructor_initializes_properties(mock_logger):
     count = 3
 
     # Act
-    with patch('kuhl_haus.canary.scripts.canary_script.sleep'):
+    with patch('kuhl_haus.canary.models.canary_script.sleep'):
         sut = ConcreteCanaryScript(
             logger=mock_logger,
             delay=delay,
@@ -38,7 +37,7 @@ def test_canary_script_constructor_initializes_properties(mock_logger):
     assert sut.count == count
 
 
-@patch('kuhl_haus.canary.scripts.canary_script.sleep')
+@patch('kuhl_haus.canary.models.canary_script.sleep')
 def test_canary_script_runs_correct_number_of_times(patched_sleep, mock_logger):
     """Test that CanaryScript calls invoke for the specified count."""
     # Arrange
@@ -59,7 +58,7 @@ def test_canary_script_runs_correct_number_of_times(patched_sleep, mock_logger):
     patched_sleep.assert_called_with(delay)
 
 
-@patch('kuhl_haus.canary.scripts.canary_script.sleep')
+@patch('kuhl_haus.canary.models.canary_script.sleep')
 def test_canary_script_handles_zero_count(patched_sleep, mock_logger):
     """Test that CanaryScript correctly handles count=0."""
     # Arrange
@@ -79,7 +78,7 @@ def test_canary_script_handles_zero_count(patched_sleep, mock_logger):
     assert patched_sleep.call_count == 0
 
 
-@patch('kuhl_haus.canary.scripts.canary_script.sleep')
+@patch('kuhl_haus.canary.models.canary_script.sleep')
 def test_canary_script_negative_count_continues_until_stopped(patched_sleep, mock_logger):
     """Test that CanaryScript runs indefinitely with negative count."""
     # Arrange
@@ -105,7 +104,7 @@ def test_canary_script_negative_count_continues_until_stopped(patched_sleep, moc
     assert patched_sleep.call_count == 5
 
 
-@patch('kuhl_haus.canary.scripts.canary_script.traceback.format_exc')
+@patch('kuhl_haus.canary.models.canary_script.traceback.format_exc')
 def test_canary_script_logs_exceptions(patched_format_exc, mock_logger):
     """Test that CanaryScript logs exceptions from invoke method."""
     # Arrange
@@ -134,7 +133,7 @@ def test_canary_script_logs_exceptions(patched_format_exc, mock_logger):
     assert traceback_output in error_message
 
 
-@patch('kuhl_haus.canary.scripts.canary_script.sleep')
+@patch('kuhl_haus.canary.models.canary_script.sleep')
 def test_canary_script_waits_between_invocations(patched_sleep, mock_logger):
     """Test that CanaryScript waits the specified delay between invocations."""
     # Arrange

@@ -342,7 +342,7 @@ files = [
 
 [[package]]
 name = "kuhl-haus-metrics"
-version = "0.2.9"
+version = "0.2.10"
 requires_python = ">=3.12"
 summary = "Application logging and instrumentation"
 groups = ["default"]
@@ -353,8 +353,8 @@ dependencies = [
     "importlib-metadata",
 ]
 files = [
-    {file = "kuhl_haus_metrics-0.2.9-py3-none-any.whl", hash = "sha256:96fb2d36d5efedc31bf7f55526e1588d033e87165d84b127f88c82c21138a974"},
-    {file = "kuhl_haus_metrics-0.2.9.tar.gz", hash = "sha256:073b5f99fc593f38dc5a31dd9d42567becfe04916a1603f46b818447676b2164"},
+    {file = "kuhl_haus_metrics-0.2.10-py3-none-any.whl", hash = "sha256:692dd440730e9c7459597b51eaaa36811057cc66e03a2526884fa54dfe4cabf8"},
+    {file = "kuhl_haus_metrics-0.2.10.tar.gz", hash = "sha256:1a9a75da28df74735a3c8605b3f44535b93b179ce7fbab24b3ebd040ae1604e4"},
 ]
 
 [[package]]
