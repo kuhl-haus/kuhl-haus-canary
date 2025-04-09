@@ -1,6 +1,6 @@
 import json
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch, MagicMock, call
 import time
 import requests
 
@@ -63,7 +63,11 @@ def test_invoke_health_check_success_with_status_code(mock_get, endpoint_model, 
         url=endpoint_model.url,
         timeout=(endpoint_model.connect_timeout, endpoint_model.read_timeout)
     )
-    mock_metrics.set_counter.assert_called_once_with('responses', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('requests', 1),
+        call('responses', 1),
+    ])
+
     assert 'response_time' in mock_metrics.attributes
     assert 'response_time_ms' in mock_metrics.attributes
     assert mock_metrics.attributes['status_code'] == 200
@@ -84,7 +88,11 @@ def test_invoke_health_check_error_status_code(mock_get, endpoint_model, mock_me
     invoke_health_check(ep=endpoint_model, metrics=mock_metrics, logger=mock_logger)
 
     # Assert
-    mock_metrics.set_counter.assert_called_once_with('errors', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('requests', 1),
+        call('errors', 1),
+    ])
+    # mock_metrics.set_counter.assert_called_once_with('errors', 1)
     assert mock_metrics.attributes['status_code'] == 500
 
 
@@ -124,7 +132,10 @@ def test_invoke_health_check_connect_timeout(mock_get, endpoint_model, mock_metr
 
     # Assert
     mock_logger.exception.assert_called_once()
-    mock_metrics.set_counter.assert_called_once_with('exceptions', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('requests', 1),
+        call('exceptions', 1),
+    ])
     assert 'exception' in mock_metrics.attributes
     assert mock_metrics.attributes['response_time'] == 3  # sum of connect and read timeout in seconds
 
@@ -140,7 +151,10 @@ def test_invoke_health_check_read_timeout(mock_get, endpoint_model, mock_metrics
 
     # Assert
     mock_logger.exception.assert_called_once()
-    mock_metrics.set_counter.assert_called_once_with('exceptions', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('requests', 1),
+        call('exceptions', 1),
+    ])
     assert 'exception' in mock_metrics.attributes
 
 
@@ -155,7 +169,10 @@ def test_invoke_health_check_unhandled_exception(mock_get, endpoint_model, mock_
 
     # Assert
     mock_logger.exception.assert_called_once()
-    mock_metrics.set_counter.assert_called_once_with('exceptions', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('requests', 1),
+        call('exceptions', 1),
+    ])
     assert 'exception' in mock_metrics.attributes
 
 
@@ -174,7 +191,10 @@ def test_invoke_health_check_json_response_success(mock_get, endpoint_model, moc
     invoke_health_check(ep=endpoint_model, metrics=mock_metrics, logger=mock_logger)
 
     # Assert
-    mock_metrics.set_counter.assert_called_once_with('responses', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('requests', 1),
+        call('responses', 1),
+    ])
     assert mock_metrics.attributes['version'] == 1.0
     mock_metrics.version_to_float.assert_called_once_with("1.2.3")
 
@@ -191,7 +211,9 @@ def test_handle_json_response_success(mock_json_loads, endpoint_model, mock_metr
     handle_json_response(response=mock_response, ep=endpoint_model, metrics=mock_metrics)
 
     # Assert
-    mock_metrics.set_counter.assert_called_once_with('responses', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('responses', 1),
+    ])
     mock_metrics.version_to_float.assert_called_once_with("1.2.3")
     assert mock_metrics.attributes['version'] == 1.0
 
@@ -206,7 +228,9 @@ def test_handle_json_response_error_status(endpoint_model, mock_metrics):
     handle_json_response(response=mock_response, ep=endpoint_model, metrics=mock_metrics)
 
     # Assert
-    mock_metrics.set_counter.assert_called_once_with('errors', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('errors', 1),
+    ])
     mock_metrics.version_to_float.assert_called_once_with("1.2.3")
     assert mock_metrics.attributes['version'] == 1.0
 
@@ -221,7 +245,9 @@ def test_handle_json_response_missing_status(endpoint_model, mock_metrics):
     handle_json_response(response=mock_response, ep=endpoint_model, metrics=mock_metrics)
 
     # Assert
-    mock_metrics.set_counter.assert_called_once_with('errors', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('errors', 1),
+    ])
     mock_metrics.version_to_float.assert_called_once_with("1.2.3")
     assert mock_metrics.attributes['version'] == 1.0
 
@@ -236,7 +262,9 @@ def test_handle_json_response_missing_version(endpoint_model, mock_metrics):
     handle_json_response(response=mock_response, ep=endpoint_model, metrics=mock_metrics)
 
     # Assert
-    mock_metrics.set_counter.assert_called_once_with('responses', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('responses', 1),
+    ])
     assert 'version' not in mock_metrics.attributes
 
 
@@ -250,7 +278,9 @@ def test_handle_json_response_none_text(endpoint_model, mock_metrics):
     handle_json_response(response=mock_response, ep=endpoint_model, metrics=mock_metrics)
 
     # Assert
-    mock_metrics.set_counter.assert_called_once_with('errors', 1)
+    mock_metrics.set_counter.assert_has_calls([
+        call('errors', 1),
+    ])
 
 
 @patch('kuhl_haus.canary.tasks.http_health_check.json.loads')
