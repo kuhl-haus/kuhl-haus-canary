@@ -1,0 +1,72 @@
+services:
+  magpie:
+    container_name: magpie
+    image: ghcr.io/kuhl-haus/kuhl-haus-magpie:latest
+    networks:
+      - canary
+    restart: unless-stopped
+    environment:
+      # timezone inside container
+      TZ: "America/Los_Angeles"
+      LOG_LEVEL: "DEBUG"
+      DJANGO_DEBUG: "True"
+      # Database configuration
+      DATABASE_URL: "sqlite:///app/data/django_db.sqlite3"
+      # Django superuser
+      DJANGO_ALLOWED_HOSTS: 'localhost,magpie,127.0.0.1'
+      DJANGO_SUPERUSER_USERNAME: "admin"
+      DJANGO_SUPERUSER_EMAIL: "admin@example.com"
+      DJANGO_SUPERUSER_PASSWORD: "changeme"  # Change this in production!
+    ports:
+      - "8000:8000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8000/api/endpoints/" ]
+      interval: 60s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    volumes:
+      - magpie_db:/app/data  # Persist database
+
+  canary:
+    container_name: canary
+    build:
+      context: .
+      dockerfile: Dockerfile
+    configs:
+      - source: canary_config
+        target: /app/config/canary.json
+      - source: resolvers_config
+        target: /app/config/resolvers.json
+    networks:
+      - canary
+    restart: unless-stopped
+    environment:
+      # timezone inside container
+      TZ: "America/Los_Angeles"
+      LOG_LEVEL: "DEBUG"
+      CONFIG_API: "https://magpie:8000/api"
+      METRIC_NAMESPACE: "local"
+      CARBON_SERVER_IP: "127.0.0.1"
+      NAMESPACE_ROOT: "canary"
+      DEFAULT_CANARY_INVOCATION_INTERVAL: 86400
+
+configs:
+  canary_config:
+    file: ./config/canary.json
+  resolvers_config:
+    file: ./config/resolvers.json
+volumes:
+  magpie_db:
+
+networks:
+  canary:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.7.0/24
+          ip_range: 172.28.7.128/25
+          gateway: 172.28.7.1

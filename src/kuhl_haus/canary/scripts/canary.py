@@ -1,7 +1,10 @@
 from typing import List
 
-from kuhl_haus.canary.env import CANARY_CONFIG_FILE_PATH, RESOLVERS_CONFIG_FILE_PATH
-from kuhl_haus.canary.models.dns_resolver import DnsResolver, DnsResolverList
+from kuhl_haus.canary.helpers.canary_configs import (
+    get_endpoints,
+    get_default_resolver_list,
+)
+from kuhl_haus.canary.models.dns_resolver import DnsResolver
 from kuhl_haus.canary.models.endpoint_model import EndpointModel
 from kuhl_haus.canary.scripts.script import Script
 from kuhl_haus.canary.tasks.dns_check import query_dns
@@ -17,8 +20,9 @@ class Canary(Script):
         self.__invoke_endpoint_checks()
 
     def __invoke_endpoint_checks(self):
-        endpoints = EndpointModel.from_file(CANARY_CONFIG_FILE_PATH)
-        resolvers = DnsResolverList.from_file(RESOLVERS_CONFIG_FILE_PATH)
+        endpoints = get_endpoints()
+        resolvers = get_default_resolver_list()
+
         if not endpoints:
             self.recorder.logger.info(f"No endpoints found, exiting.")
             return
@@ -27,7 +31,8 @@ class Canary(Script):
                 self.recorder.logger.info(f"Skipping {ep.mnemonic}")
                 continue
             try:
-                self.__invoke_dns_check(ep=ep, resolvers=resolvers)
+                if resolvers:
+                    self.__invoke_dns_check(ep=ep, resolvers=resolvers)
                 self.__invoke_tls_check(ep=ep)
                 self.__invoke_health_check(ep=ep)
             except Exception as e:
@@ -47,7 +52,6 @@ class Canary(Script):
         self.recorder.log_metrics(metrics)
 
     def __invoke_dns_check(self, ep: EndpointModel, resolvers: List[DnsResolver]):
-        if resolvers:
-            metrics = self.recorder.get_metrics(mnemonic="dns", hostname=ep.hostname)
-            query_dns(resolvers=resolvers, ep=ep, metrics=metrics, logger=self.recorder.logger)
-            self.recorder.log_metrics(metrics)
+        metrics = self.recorder.get_metrics(mnemonic="dns", hostname=ep.hostname)
+        query_dns(resolvers=resolvers, ep=ep, metrics=metrics, logger=self.recorder.logger)
+        self.recorder.log_metrics(metrics)

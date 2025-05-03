@@ -1,5 +1,5 @@
 """
-    Dummy conftest.py for canary.
+    kuhl_haus/canary/tests/conftest.py
 
     If you don't know what this is for, just leave it empty.
     Read more about conftest.py under:
@@ -7,4 +7,3 @@
     - https://docs.pytest.org/en/stable/writing_plugins.html
 """
 
-# import pytest

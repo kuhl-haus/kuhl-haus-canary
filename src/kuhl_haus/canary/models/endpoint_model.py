@@ -1,7 +1,5 @@
-import json
 from dataclasses import dataclass, field
-from functools import lru_cache
-from typing import Any, List, Optional, Sequence
+from typing import Any, Optional, Sequence
 from urllib import parse
 
 
@@ -23,21 +21,19 @@ class EndpointModel:
     read_timeout: Optional[float] = 7
     ignore: Optional[bool] = False
 
-    @staticmethod
-    def from_file(file_path) -> List[Any]:
-        try:
-            with open(file_path, 'r') as file:
-                file_contents = json.load(file)
-            return [EndpointModel(**x) for x in file_contents]
-        except FileNotFoundError:
-            print(f"File {file_path} not found.")
-            return []
-        except json.JSONDecodeError:
-            print(f"Error decoding JSON from file {file_path}")
-            return []
+    def __post_init__(self):
+        """
+        __post_init__
+
+        Automatically called after the dataclass initialization to perform additional processing.
+
+        Raises
+        ------
+        None
+        """
+        self.path = self.__normalize_path(self.path)
 
     @staticmethod
-    @lru_cache
     def __normalize_path(path: str) -> str:
         if not path:
             path = "/"

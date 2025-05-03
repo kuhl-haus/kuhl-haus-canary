@@ -31,11 +31,13 @@ def mock_resolver():
     return resolver
 
 
-@patch('kuhl_haus.canary.scripts.canary.EndpointModel')
-def test_invoke_no_endpoints(mock_endpoint_model, mock_recorder):
+@patch('kuhl_haus.canary.scripts.canary.get_default_resolver_list')
+@patch('kuhl_haus.canary.scripts.canary.get_endpoints')
+def test_invoke_no_endpoints(patched_get_endpoints, get_default_resolver_list, mock_recorder):
     """Test that Canary exits gracefully when no endpoints are found."""
     # Arrange
-    mock_endpoint_model.from_file.return_value = []
+    get_default_resolver_list.return_value = []
+    patched_get_endpoints.return_value = []
     sut = Canary
 
     # Act
@@ -47,14 +49,14 @@ def test_invoke_no_endpoints(mock_endpoint_model, mock_recorder):
     mock_recorder.log_metrics.assert_not_called()
 
 
-@patch('kuhl_haus.canary.scripts.canary.DnsResolverList')
-@patch('kuhl_haus.canary.scripts.canary.EndpointModel')
+@patch('kuhl_haus.canary.scripts.canary.get_default_resolver_list')
+@patch('kuhl_haus.canary.scripts.canary.get_endpoints')
 @patch('kuhl_haus.canary.scripts.canary.invoke_health_check')
 @patch('kuhl_haus.canary.scripts.canary.invoke_tls_check')
 @patch('kuhl_haus.canary.scripts.canary.query_dns')
 def test_invoke_skips_ignored_endpoints(
-        mock_query_dns, mock_invoke_tls, mock_invoke_health,
-        mock_endpoint_model, mock_resolver_list, mock_recorder, mock_endpoint
+        mock_query_dns, mock_invoke_tls, mock_invoke_health, get_endpoints, get_default_resolver_list,
+        mock_recorder, mock_endpoint
 ):
     """Test that Canary skips endpoints with ignore flag set."""
     # Arrange
@@ -62,8 +64,8 @@ def test_invoke_skips_ignored_endpoints(
     ignored_endpoint.mnemonic = "ignored-endpoint"
     ignored_endpoint.ignore = True
 
-    mock_endpoint_model.from_file.return_value = [mock_endpoint, ignored_endpoint]
-    mock_resolver_list.from_file.return_value = []
+    get_endpoints.return_value = [mock_endpoint, ignored_endpoint]
+    get_default_resolver_list.return_value = []
 
     sut = Canary
 
@@ -77,19 +79,19 @@ def test_invoke_skips_ignored_endpoints(
     assert mock_query_dns.call_count == 0  # No resolvers provided
 
 
-@patch('kuhl_haus.canary.scripts.canary.DnsResolverList')
-@patch('kuhl_haus.canary.scripts.canary.EndpointModel')
+@patch('kuhl_haus.canary.scripts.canary.get_default_resolver_list')
+@patch('kuhl_haus.canary.scripts.canary.get_endpoints')
 @patch('kuhl_haus.canary.scripts.canary.invoke_health_check')
 @patch('kuhl_haus.canary.scripts.canary.invoke_tls_check')
 @patch('kuhl_haus.canary.scripts.canary.query_dns')
 def test_invoke_calls_all_checks(
-        mock_query_dns, mock_invoke_tls, mock_invoke_health,
-        mock_endpoint_model, mock_resolver_list, mock_recorder, mock_endpoint, mock_resolver
+        mock_query_dns, mock_invoke_tls, mock_invoke_health, get_endpoints, get_default_resolver_list,
+        mock_recorder, mock_endpoint, mock_resolver
 ):
     """Test that Canary invokes all checks for valid endpoints."""
     # Arrange
-    mock_endpoint_model.from_file.return_value = [mock_endpoint]
-    mock_resolver_list.from_file.return_value = [mock_resolver]
+    get_endpoints.return_value = [mock_endpoint]
+    get_default_resolver_list.return_value = [mock_resolver]
 
     sut = Canary
 
@@ -140,19 +142,19 @@ def test_invoke_calls_all_checks(
     mock_recorder.log_metrics.assert_any_call(health_metrics)
 
 
-@patch('kuhl_haus.canary.scripts.canary.DnsResolverList')
-@patch('kuhl_haus.canary.scripts.canary.EndpointModel')
+@patch('kuhl_haus.canary.scripts.canary.get_default_resolver_list')
+@patch('kuhl_haus.canary.scripts.canary.get_endpoints')
 @patch('kuhl_haus.canary.scripts.canary.invoke_health_check')
 @patch('kuhl_haus.canary.scripts.canary.invoke_tls_check')
 @patch('kuhl_haus.canary.scripts.canary.query_dns')
 def test_invoke_handles_exceptions(
         mock_query_dns, mock_invoke_tls, mock_invoke_health,
-        mock_endpoint_model, mock_resolver_list, mock_recorder, mock_endpoint
+        get_endpoints, get_default_resolver_list, mock_recorder, mock_endpoint
 ):
     """Test that Canary handles exceptions from checks gracefully."""
     # Arrange
-    mock_endpoint_model.from_file.return_value = [mock_endpoint]
-    mock_resolver_list.from_file.return_value = []
+    get_endpoints.return_value = [mock_endpoint]
+    get_default_resolver_list.return_value = []
 
     # Configure one of the invokes to raise an exception
     test_exception = RuntimeError("Test exception")
@@ -171,15 +173,15 @@ def test_invoke_handles_exceptions(
     )
 
 
-@patch('kuhl_haus.canary.scripts.canary.DnsResolverList')
-@patch('kuhl_haus.canary.scripts.canary.EndpointModel')
+@patch('kuhl_haus.canary.scripts.canary.get_default_resolver_list')
+@patch('kuhl_haus.canary.scripts.canary.get_endpoints')
 def test_invoke_dns_check_skips_when_no_resolvers(
-        mock_endpoint_model, mock_resolver_list, mock_recorder, mock_endpoint
+        get_endpoints, get_default_resolver_list, mock_recorder, mock_endpoint
 ):
     """Test that DNS check is skipped when no resolvers are available."""
     # Arrange
-    mock_endpoint_model.from_file.return_value = [mock_endpoint]
-    mock_resolver_list.from_file.return_value = []
+    get_endpoints.return_value = [mock_endpoint]
+    get_default_resolver_list.return_value = []
 
     sut = Canary
 
