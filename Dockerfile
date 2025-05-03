@@ -19,6 +19,6 @@ COPY --from=builder /build/dist/*.whl /tmp/
 RUN pip install --no-cache-dir /tmp/*.whl
 
 WORKDIR /app/config
-COPY ./data/ /app/config/
+COPY ./config/ /app/config/
 
 CMD ["sh", "-c", "python -m kuhl_haus.canary.app --script=canary"]
