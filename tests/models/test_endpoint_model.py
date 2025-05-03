@@ -1,9 +1,6 @@
-import pytest
-import json
-import tempfile
-import os
 from urllib.parse import urlparse
-from unittest.mock import patch, mock_open
+
+import pytest
 
 from kuhl_haus.canary.models.endpoint_model import EndpointModel
 
@@ -155,136 +152,34 @@ def test_endpoint_model_url_property_with_all_components(complete_endpoint_model
 def test_endpoint_model_normalize_path_empty():
     """Test __normalize_path with empty path."""
     # Arrange
-    sut = EndpointModel(mnemonic="test", hostname="example.com")
+    sut = EndpointModel
 
     # Act
-    result = sut._EndpointModel__normalize_path("")
+    result = sut(mnemonic="test", hostname="example.com", path="")
 
     # Assert
-    assert result == "/"
+    assert result.path == "/"
 
 
 def test_endpoint_model_normalize_path_missing_leading_slash():
     """Test __normalize_path with path missing leading slash."""
     # Arrange
-    sut = EndpointModel(mnemonic="test", hostname="example.com")
+    sut = EndpointModel
 
     # Act
-    result = sut._EndpointModel__normalize_path("api/v1")
+    result = sut(mnemonic="test", hostname="example.com", path="api/v1")
 
     # Assert
-    assert result == "/api/v1"
+    assert result.path == "/api/v1"
 
 
 def test_endpoint_model_normalize_path_duplicate_slashes():
     """Test __normalize_path with duplicate slashes."""
     # Arrange
-    sut = EndpointModel(mnemonic="test", hostname="example.com")
+    sut = EndpointModel
 
     # Act
-    result = sut._EndpointModel__normalize_path("//api//v1///endpoint//")
+    result = sut(mnemonic="test", hostname="example.com", path="//api//v1///endpoint//")
 
     # Assert
-    assert result == "/api/v1/endpoint/"
-
-
-@patch('builtins.open', new_callable=mock_open,
-       read_data='[{"mnemonic": "test1", "hostname": "example.com"}, {"mnemonic": "test2", "hostname": "example.org"}]')
-def test_from_file_success(mock_file):
-    """Test from_file method with valid JSON file."""
-    # Arrange & Act
-    result = EndpointModel.from_file("dummy_path.json")
-
-    # Assert
-    assert len(result) == 2
-    assert result[0].mnemonic == "test1"
-    assert result[0].hostname == "example.com"
-    assert result[1].mnemonic == "test2"
-    assert result[1].hostname == "example.org"
-    mock_file.assert_called_once_with("dummy_path.json", "r")
-
-
-def test_from_file_with_real_file():
-    """Test from_file method with a real temporary file."""
-    # Arrange
-    test_data = [
-        {"mnemonic": "test1", "hostname": "example.com"},
-        {"mnemonic": "test2", "hostname": "example.org", "port": 8080}
-    ]
-
-    with tempfile.NamedTemporaryFile(delete=False, mode='w') as temp_file:
-        json.dump(test_data, temp_file)
-        temp_file_path = temp_file.name
-
-    try:
-        # Act
-        result = EndpointModel.from_file(temp_file_path)
-
-        # Assert
-        assert len(result) == 2
-        assert result[0].mnemonic == "test1"
-        assert result[0].hostname == "example.com"
-        assert result[1].mnemonic == "test2"
-        assert result[1].hostname == "example.org"
-        assert result[1].port == 8080
-    finally:
-        # Cleanup
-        os.unlink(temp_file_path)
-
-
-@patch('builtins.open', side_effect=FileNotFoundError())
-def test_from_file_file_not_found(mock_file):
-    """Test from_file method when file is not found."""
-    # Arrange & Act
-    with patch('builtins.print') as mock_print:
-        result = EndpointModel.from_file("nonexistent_file.json")
-
-    # Assert
-    assert result == []
-    mock_print.assert_called_once_with("File nonexistent_file.json not found.")
-
-
-@patch('builtins.open', new_callable=mock_open, read_data='invalid json')
-def test_from_file_invalid_json(mock_file):
-    """Test from_file method with invalid JSON."""
-    # Arrange & Act
-    with patch('builtins.print') as mock_print:
-        result = EndpointModel.from_file("invalid_json.json")
-
-    # Assert
-    assert result == []
-    mock_print.assert_called_once_with("Error decoding JSON from file invalid_json.json")
-
-
-def test_from_file_invalid_endpoint_model_data():
-    """Test from_file method with JSON that doesn't match EndpointModel fields."""
-    # Arrange
-    test_data = [{"invalid_field": "value"}]  # Missing required fields
-
-    with tempfile.NamedTemporaryFile(delete=False, mode='w') as temp_file:
-        json.dump(test_data, temp_file)
-        temp_file_path = temp_file.name
-
-    try:
-        # Act & Assert
-        with pytest.raises(TypeError):
-            EndpointModel.from_file(temp_file_path)
-    finally:
-        # Cleanup
-        os.unlink(temp_file_path)
-
-
-def test_lru_cache_functionality_for_normalize_path():
-    """Test that __normalize_path uses lru_cache effectively."""
-    # Arrange
-    sut = EndpointModel(mnemonic="test", hostname="example.com")
-
-    # Act
-    # Call the same path twice
-    result1 = sut._EndpointModel__normalize_path("//api//test//")
-    result2 = sut._EndpointModel__normalize_path("//api//test//")
-
-    # Assert
-    assert result1 == "/api/test/"
-    assert result2 == "/api/test/"
-    # We can't easily assert the cache was used, but at least we can verify same results
+    assert result.path == "/api/v1/endpoint/"

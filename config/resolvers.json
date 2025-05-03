@@ -1,0 +1,10 @@
+{
+    "name": "default",
+    "resolvers" :
+    [
+        {
+            "name": "localhost",
+            "ip_address": "127.0.0.1"
+        }
+    ]
+}

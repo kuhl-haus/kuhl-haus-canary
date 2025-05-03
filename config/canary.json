@@ -1,0 +1,19 @@
+[
+  {
+    "mnemonic": "test",
+    "hostname": "example.com",
+    "scheme": "https",
+    "port": 443,
+    "path": "/health",
+    "query": null,
+    "fragment": null,
+    "healthy_status_code": 200,
+    "json_response": true,
+    "status_key": "status",
+    "healthy_status": "ok",
+    "version_key": "version",
+    "connect_timeout": 7.0,
+    "read_timeout": 7.0,
+    "ignore": true
+  }
+]
