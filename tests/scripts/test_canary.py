@@ -101,10 +101,10 @@ def test_invoke_calls_all_checks(
     health_metrics = {"health_metric": "value"}
 
     # Configure return values for get_metrics based on parameters
-    def get_metrics_side_effect(mnemonic, hostname):
-        if mnemonic == "dns":
+    def get_metrics_side_effect(name, mnemonic, hostname):
+        if name == "dns":
             return dns_metrics
-        elif mnemonic == "tls":
+        elif name == "tls":
             return tls_metrics
         else:
             return health_metrics
