@@ -72,4 +72,4 @@ def get_default_resolver_list():
 
     if resolver_list:
         return [DnsResolver(**x) for x in resolver_list.resolvers]
-    return None
+    return []

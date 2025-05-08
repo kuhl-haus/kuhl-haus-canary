@@ -331,4 +331,4 @@ def test_get_default_resolver_list_empty_result(mock_from_file, mock_get):
     sut = canary_configs.get_default_resolver_list()
 
     # Assert
-    assert sut is None
+    assert sut == []
