@@ -38,7 +38,7 @@ def endpoint_model():
         connect_timeout=1.0,
         read_timeout=2.0,
         healthy_status_code=200,
-        json_response=False,
+        response_format="text",
         status_key="status",
         healthy_status="UP",
         version_key="version"
@@ -180,7 +180,7 @@ def test_invoke_health_check_unhandled_exception(mock_get, endpoint_model, mock_
 def test_invoke_health_check_json_response_success(mock_get, endpoint_model, mock_metrics, mock_logger):
     """Test health check with successful JSON response."""
     # Arrange
-    endpoint_model.json_response = True
+    endpoint_model.response_format = "json"  # Changed from json_response = True
     mock_response = MagicMock()
     mock_response.status_code = 200
     mock_response.text = json.dumps({"status": "UP", "version": "1.2.3"})

@@ -12,14 +12,19 @@ class EndpointModel:
     path: Optional[str] = field(default="/")
     query: Optional[Sequence[tuple[Any, Any]]] = None
     fragment: Optional[str] = None
+    verb: Optional[str] = "GET"
+    body: Optional[str] = None
     healthy_status_code: Optional[int] = 200
-    json_response: Optional[bool] = True
-    status_key: Optional[str] = "status"
-    healthy_status: Optional[str] = "OK"
-    version_key: Optional[str] = "version"
+    response_format: Optional[str] = "text"
+    status_key: Optional[str] = None
+    healthy_status: Optional[str] = None
+    version_key: Optional[str] = None
     connect_timeout: Optional[float] = 7
     read_timeout: Optional[float] = 7
     ignore: Optional[bool] = False
+    health_check: Optional[bool] = False
+    tls_check: Optional[bool] = False
+    dns_check: Optional[bool] = False
 
     def __post_init__(self):
         """

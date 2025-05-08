@@ -91,7 +91,7 @@ def test_get_endpoints_api_success(mock_get, config_api):
         "port": 443,
         "path": "/health",
         "healthy_status_code": 200,
-        "json_response": False,
+        "response_format": "json",
         "status_key": "status",
         "healthy_status": "ok",
         "version_key": "version",

@@ -21,7 +21,7 @@ def complete_endpoint_model():
         query=[("key1", "value1"), ("key2", "value2")],
         fragment="section1",
         healthy_status_code=201,
-        json_response=True,
+        response_format="json",  # Changed from json_response=True
         status_key="state",
         healthy_status="OPERATIONAL",
         version_key="version_info",
@@ -56,7 +56,7 @@ def test_endpoint_model_initialization_with_all_fields(complete_endpoint_model):
     assert sut.query == [("key1", "value1"), ("key2", "value2")]
     assert sut.fragment == "section1"
     assert sut.healthy_status_code == 201
-    assert sut.json_response is True
+    assert sut.response_format == "json"
     assert sut.status_key == "state"
     assert sut.healthy_status == "OPERATIONAL"
     assert sut.version_key == "version_info"

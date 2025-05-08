@@ -31,10 +31,12 @@ class Canary(Script):
                 self.recorder.logger.info(f"Skipping {ep.mnemonic}")
                 continue
             try:
-                if resolvers:
+                if resolvers and ep.dns_check:
                     self.__invoke_dns_check(ep=ep, resolvers=resolvers)
-                self.__invoke_tls_check(ep=ep)
-                self.__invoke_health_check(ep=ep)
+                if ep.tls_check:
+                    self.__invoke_tls_check(ep=ep)
+                if ep.health_check:
+                    self.__invoke_health_check(ep=ep)
             except Exception as e:
                 self.recorder.logger.exception(
                     msg=f"Unhandled exception testing mnemonic:{ep.mnemonic}",
@@ -42,16 +44,16 @@ class Canary(Script):
                 )
 
     def __invoke_health_check(self, ep: EndpointModel):
-        metrics = self.recorder.get_metrics(mnemonic=ep.mnemonic, hostname=ep.hostname)
+        metrics = self.recorder.get_metrics(name="health", mnemonic=ep.mnemonic, hostname=ep.hostname)
         invoke_health_check(ep=ep, metrics=metrics, logger=self.recorder.logger)
         self.recorder.log_metrics(metrics)
 
     def __invoke_tls_check(self, ep: EndpointModel):
-        metrics = self.recorder.get_metrics(mnemonic="tls", hostname=ep.hostname)
+        metrics = self.recorder.get_metrics(name="tls", mnemonic=ep.mnemonic, hostname=ep.hostname)
         invoke_tls_check(ep=ep, metrics=metrics, logger=self.recorder.logger)
         self.recorder.log_metrics(metrics)
 
     def __invoke_dns_check(self, ep: EndpointModel, resolvers: List[DnsResolver]):
-        metrics = self.recorder.get_metrics(mnemonic="dns", hostname=ep.hostname)
+        metrics = self.recorder.get_metrics(name="dns", mnemonic=ep.mnemonic, hostname=ep.hostname)
         query_dns(resolvers=resolvers, ep=ep, metrics=metrics, logger=self.recorder.logger)
         self.recorder.log_metrics(metrics)

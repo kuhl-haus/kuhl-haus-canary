@@ -20,7 +20,7 @@ def invoke_health_check(ep: EndpointModel, metrics: Metrics, logger: Logger):
         metrics.attributes['status_code'] = response.status_code
         metrics.attributes['text'] = response.text
 
-        if ep.json_response:
+        if ep.response_format == "json":
             handle_json_response(response=response, ep=ep, metrics=metrics)
         elif response.status_code == ep.healthy_status_code:
             metrics.set_counter('responses', 1)

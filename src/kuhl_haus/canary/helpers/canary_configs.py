@@ -63,7 +63,6 @@ def get_resolver_lists():
 
 
 def get_default_resolver_list():
-    resolver_list = []
     if CONFIG_API:
         response = requests.get(f"{CONFIG_API}/resolver-lists/1/")
         json_data = response.json()
@@ -73,3 +72,4 @@ def get_default_resolver_list():
 
     if resolver_list:
         return [DnsResolver(**x) for x in resolver_list.resolvers]
+    return None

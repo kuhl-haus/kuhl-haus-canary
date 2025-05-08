@@ -47,11 +47,11 @@ services:
       # timezone inside container
       TZ: "America/Los_Angeles"
       LOG_LEVEL: "DEBUG"
-      CONFIG_API: "https://magpie:8000/api"
+      CONFIG_API: "http://magpie:8000/api"
       METRIC_NAMESPACE: "local"
       CARBON_SERVER_IP: "127.0.0.1"
       NAMESPACE_ROOT: "canary"
-      DEFAULT_CANARY_INVOCATION_INTERVAL: 86400
+      DEFAULT_CANARY_INVOCATION_INTERVAL: 5
 
 configs:
   canary_config:
