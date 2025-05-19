@@ -28,6 +28,7 @@ def mock_endpoint():
 def mock_resolver():
     resolver = MagicMock(spec=DnsResolver)
     resolver.name = "test-resolver"
+    resolver.ip_address = "127.0.0.1"
     return resolver
 
 
@@ -91,7 +92,8 @@ def test_invoke_calls_all_checks(
     """Test that Canary invokes all checks for valid endpoints."""
     # Arrange
     get_endpoints.return_value = [mock_endpoint]
-    get_default_resolver_list.return_value = [mock_resolver]
+    dns_resolver_list = DnsResolverList(name="default", resolvers=[mock_resolver])
+    get_default_resolver_list.return_value = dns_resolver_list
 
     sut = Canary
 
@@ -117,7 +119,7 @@ def test_invoke_calls_all_checks(
     # Assert
     # Check that all checks were called with correct parameters
     mock_query_dns.assert_called_once_with(
-        resolvers=[mock_resolver],
+        resolvers=dns_resolver_list,
         ep=mock_endpoint,
         metrics=dns_metrics,
         logger=mock_recorder.logger
