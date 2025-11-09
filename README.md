@@ -19,9 +19,9 @@
 
 # kuhl-haus-canary
 
-Simple canary and site monitoring service
+~~Simple canary and site monitoring service~~
 
-... more to come!
+This project is superceded by [Kuhl Haus Magpie](https://github.com/kuhl-haus/kuhl-haus-magpie/tree/mainline)
 
 ## Note
 
